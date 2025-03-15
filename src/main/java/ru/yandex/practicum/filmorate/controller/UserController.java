@@ -31,6 +31,8 @@ public class UserController {
         log.info("Получен запрос на создание пользователя: {}", user);
 
         user.setId(getNextId());
+        if (user.getName() == null)
+            user.setName(user.getLogin());
         users.put(user.getId(), user);
         return user;
     }
