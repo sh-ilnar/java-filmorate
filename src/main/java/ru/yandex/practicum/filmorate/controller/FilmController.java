@@ -34,7 +34,7 @@ public class FilmController {
 
         LocalDate minReleaseDate = LocalDate.of(1895, 12, 28);
         if (film.getReleaseDate().isBefore(minReleaseDate)) {
-            log.warn("не корректная дата релиза");
+            log.error("не корректная дата релиза");
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }
 
@@ -56,7 +56,7 @@ public class FilmController {
 
             LocalDate minReleaseDate = LocalDate.of(1895, 12, 28);
             if (newFilm.getReleaseDate().isBefore(minReleaseDate)) {
-                log.warn("не корректная дата релиза");
+                log.error("не корректная дата релиза");
                 throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
             }
 
