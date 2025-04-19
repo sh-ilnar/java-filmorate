@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -32,4 +33,6 @@ public class User {
 
     @PastOrPresent(message = "указана не корректная дата рождения")
     LocalDate birthday;
+
+    Set<Integer> friends;
 }
