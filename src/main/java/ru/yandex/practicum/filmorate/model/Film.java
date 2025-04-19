@@ -37,8 +37,7 @@ public class Film {
     public Integer getLikesSize() {
         if (likes == null) {
             return 0;
-        }
-        else {
+        } else {
             return likes.size();
         }
     }
