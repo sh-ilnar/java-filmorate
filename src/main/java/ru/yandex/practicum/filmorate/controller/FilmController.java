@@ -23,7 +23,7 @@ public class FilmController {
 
     @GetMapping
     public Collection<Film> getFilms() {
-        log.debug("Получен запрос на получение всех фильмов");
+        log.info("Получен запрос на получение всех фильмов");
         return filmService.getAllFilms();
     }
 

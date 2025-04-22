@@ -21,6 +21,9 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
+        if (!userStorage.isExistUser(id)) {
+            throw new NotFoundException("Пользователь с указанным идентификатором не найден");
+        }
         return userStorage.getUserById(id);
     }
 
