@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -13,6 +15,7 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
+@Validated
 @RequestMapping("/films")
 public class FilmController {
     private final FilmService filmService;
@@ -72,7 +75,9 @@ public class FilmController {
 
     @GetMapping("/popular")
     public Collection<Film> findFilmsByParams(
-            @RequestParam(defaultValue = "10") Integer count
+            @Positive(message = "Количество не может быть отрицательным")
+            @RequestParam(defaultValue = "10")
+            Integer count
     ) {
         log.info("Получен запрос на получение популярных фильмов.");
         return filmService.getPopularFilms(SortOrder.DESCENDING, 0, count);
