@@ -1,6 +1,6 @@
 # java-filmorate
 
-![](src/images/filmorate_er_diagram.png)
+![](../src/images/filmorate_er_diagram.png)
 
 --Получение всех пользователей
 SELECT 
