@@ -5,33 +5,37 @@ import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * Film.
- */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 public class Film {
 
-    Integer id;
+    private Integer id;
 
     @NotBlank(message = "должно быть указано наименование")
-    String name;
+    private String name;
 
-    @Size(max = 200, message = "Описание не может быть длиннее 200 символов")
-    String description;
+    @Size(min = 1, max = 200, message = "Описание не может быть длиннее 200 символов")
+    private String description;
 
     @NotNull(message = "Дата релиза не может быть пустой")
     @PastOrPresent(message = "Указана не корректная дата релиза")
-    LocalDate releaseDate;
+    private LocalDate releaseDate;
 
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
-    Integer duration;
+    private Integer duration;
+
+    private Mpa mpa;
+
+    private LinkedHashSet<Genre> genres;
 
     @JsonIgnore
     Set<Integer> likes;

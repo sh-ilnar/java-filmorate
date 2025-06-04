@@ -10,13 +10,10 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
+
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
 
@@ -34,11 +31,7 @@ public class FilmService {
             int from,
             int size
     ) {
-        return filmStorage.getFilms().values().stream()
-                .sorted(getLikesComparator(sortOrder))
-                .skip(from)
-                .limit(size)
-                .collect(Collectors.toList());
+        return filmStorage.getFilmsWithPagination(sortOrder, from, size);
     }
 
     public Film getFilmById(Integer id) {
@@ -74,13 +67,9 @@ public class FilmService {
         }
 
         Film film = filmStorage.getFilmById(filmId);
-
-        Set<Integer> filmLikes = film.getLikes();
-        if (filmLikes == null) {
-            filmLikes = new HashSet<>();
-            film.setLikes(filmLikes);
+        if (!film.getLikes().contains(userId)) {
+            filmStorage.putLike(filmId, userId);
         }
-        film.getLikes().add(userId);
     }
 
     public void deleteLike(Integer filmId, Integer userId) {
@@ -92,12 +81,9 @@ public class FilmService {
         }
 
         Film film = filmStorage.getFilmById(filmId);
-        Set<Integer> filmLikes = film.getLikes();
-        if (filmLikes == null) {
-            return;
+        if (film.getLikes().contains(userId)) {
+            filmStorage.deleteLike(filmId, userId);
         }
-
-        film.getLikes().remove(userId);
     }
 
     private void validateReleaseDate(Film film) {
@@ -105,16 +91,5 @@ public class FilmService {
         if (film.getReleaseDate().isBefore(minReleaseDate)) {
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }
-    }
-
-    private static Comparator<Film> getLikesComparator(SortOrder sortOrder) {
-
-        Comparator<Film> comparator = Comparator.comparing(Film::getLikesSize);
-
-        if (sortOrder.equals(SortOrder.DESCENDING)) {
-            comparator = comparator.reversed();
-        }
-
-        return comparator;
     }
 }
