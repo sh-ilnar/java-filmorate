@@ -144,11 +144,9 @@ public class UserJdbcStorage implements UserStorage {
     @Override
     public Collection<User> getFriends(Integer userId) {
         String sqlQuery = "SELECT u.* FROM users u " +
-                "LEFT JOIN friend_requests fr1 ON u.id = fr1.friend_id " +
-                "LEFT JOIN friend_requests fr2 ON u.id = fr2.user_id " +
-                "WHERE (fr1.user_id = ? OR fr2.friend_id = ?) " +
-                "AND u.id <> ?";
-        return jdbcTemplate.query(sqlQuery, rowMapper, userId, userId, userId);
+                "JOIN friend_requests fr ON u.id = fr.friend_id " +
+                "WHERE (fr.user_id = ?) ";
+        return jdbcTemplate.query(sqlQuery, rowMapper, userId);
     }
 
     @Override

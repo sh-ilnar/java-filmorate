@@ -31,6 +31,14 @@ public class FilmController {
         return filmService.getAllFilms();
     }
 
+    @GetMapping("/{filmId}")
+    public Film getFilmByIf(
+            @PathVariable("filmId") Integer filmId
+    ) {
+        log.info("Получен запрос на получение фильма с идентификатором: {}", filmId);
+        return filmService.getFilmById(filmId);
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Film create(@Valid @RequestBody Film film) {
