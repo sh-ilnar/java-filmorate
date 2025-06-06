@@ -55,15 +55,10 @@ public class FilmJdbcStorage implements FilmStorage {
             int size) {
 
         String orderBy;
-        switch (sortOrder) {
-            case ASCENDING:
-                orderBy = "ASC";
-                break;
-            case DESCENDING:
-                orderBy = "DESC";
-                break;
-            default:
-                orderBy = "DESC";
+        if (Objects.requireNonNull(sortOrder) == SortOrder.ASCENDING) {
+            orderBy = "ASC";
+        } else {
+            orderBy = "DESC";
         }
 
         String sql = "SELECT f.*, m.id AS mpa_id, m.name AS mpa_name, m.description AS mpa_description " +
@@ -186,7 +181,9 @@ public class FilmJdbcStorage implements FilmStorage {
     }
 
     private void loadGenresForFilms(List<Film> films) {
-        if (films.isEmpty()) return;
+        if (CollectionUtils.isEmpty(films) ) {
+            return;
+        }
 
         String sqlQuery = "SELECT fg.film_id, g.id as genre_id, g.name as genre_name " +
                 "FROM film_genres fg JOIN genres g ON fg.genre_id = g.id " +
