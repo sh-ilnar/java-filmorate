@@ -181,7 +181,7 @@ public class FilmJdbcStorage implements FilmStorage {
     }
 
     private void loadGenresForFilms(List<Film> films) {
-        if (CollectionUtils.isEmpty(films) ) {
+        if (CollectionUtils.isEmpty(films)) {
             return;
         }
 
