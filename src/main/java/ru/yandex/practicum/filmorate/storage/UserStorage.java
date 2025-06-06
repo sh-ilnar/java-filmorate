@@ -22,4 +22,12 @@ public interface UserStorage {
     void deleteUserById(Integer id);
 
     Boolean isExistUser(Integer id);
+
+    void addFriend(Integer userId, Integer friendId);
+
+    void deleteFriend(Integer userId, Integer friendId);
+
+    Collection<User> getFriends(Integer userId);
+
+    Collection<User> getCommonFriends(Integer userId, Integer otherId);
 }

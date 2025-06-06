@@ -9,12 +9,14 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 public class User {

@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -57,23 +56,7 @@ public class UserService {
             throw new NotFoundException("Пользователь с идентификатором " + friendId + " не найден");
         }
 
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-
-        Set<Integer> userFriends = user.getFriends();
-        if (userFriends == null) {
-            userFriends = new HashSet<>();
-            user.setFriends(userFriends);
-        }
-
-        Set<Integer> friendFriends = friend.getFriends();
-        if (friendFriends == null) {
-            friendFriends = new HashSet<>();
-            friend.setFriends(friendFriends);
-        }
-
-        userFriends.add(friendId);
-        friendFriends.add(userId);
+        userStorage.addFriend(userId, friendId);
     }
 
     public void deleteFriend(Integer userId, Integer friendId) {
@@ -84,42 +67,23 @@ public class UserService {
             throw new NotFoundException("Пользователь с идентификатором " + friendId + " не найден");
         }
 
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-        Set<Integer> userFriends = user.getFriends();
-        Set<Integer> friendFriends = friend.getFriends();
-
-        if (userFriends == null || friendFriends == null) {
-            return;
-        }
-
-        userFriends.remove(friendId);
-        friendFriends.remove(userId);
+        userStorage.deleteFriend(userId, friendId);
     }
 
     public Collection<User> getFriends(Integer userId) {
         if (!userStorage.isExistUser(userId)) {
             throw new NotFoundException("Пользователь с идентификатором " + userId + " не найден");
         }
-        User user = getUserById(userId);
-        Collection<Integer> friendsIds = user.getFriends();
-
-        if (friendsIds == null) {
-            return Collections.emptyList();
-        }
-        return userStorage.getUsersByIds(friendsIds).values();
+        return userStorage.getFriends(userId);
     }
 
     public Collection<User> getCommonFriends(Integer userId, Integer otherId) {
-        User user = getUserById(userId);
-        User otherUser = getUserById(otherId);
-        Set<Integer> userFriends = user.getFriends();
-        Set<Integer> otherUserFriends = otherUser.getFriends();
-
-        Set<Integer> userIds = userFriends.stream()
-                .filter(otherUserFriends::contains)
-                .collect(Collectors.toSet());
-
-        return userStorage.getUsersByIds(userIds).values();
+        if (!userStorage.isExistUser(userId)) {
+            throw new NotFoundException("Пользователь с идентификатором " + userId + " не найден");
+        }
+        if (!userStorage.isExistUser(otherId)) {
+            throw new NotFoundException("Пользователь с идентификатором " + otherId + " не найден");
+        }
+        return userStorage.getCommonFriends(userId, otherId);
     }
 }
